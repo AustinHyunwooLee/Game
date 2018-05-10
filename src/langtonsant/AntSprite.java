@@ -1,0 +1,64 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package langtonsant;
+
+import basicgraphics.Sprite;
+import basicgraphics.SpriteComponent;
+import basicgraphics.images.Picture;
+import java.awt.Dimension;
+import java.io.IOException;
+
+/**
+ *
+ * @author sbrandt
+ */
+class AntSprite extends Sprite {
+    Picture pic;
+    
+    public AntSprite() throws IOException {
+        pic = new Picture("ant-small.png");
+        setPicture(pic);
+    }
+    
+    int i=Ant.NX/2,j=Ant.NY/2;
+    SpriteComponent sc;
+    int facing = 2;
+    boolean[][] grid;
+    
+    public void preMove() {
+        Dimension d = sc.getSize();
+        int delx = d.width / Ant.NX;
+        int dely = d.height / Ant.NY;
+        setX(i * delx + (delx - getPicture().getWidth())/2);
+        setY(j * dely + (dely - getPicture().getHeight())/2);
+    }
+    
+    public void postMove() {
+        if(grid[i][j]) {
+            facing += 1;
+        } else {
+            facing -= 1;
+        }
+        setPicture(pic.rotate(Math.PI*0.5*facing));
+        grid[i][j] = !grid[i][j];
+        int facingx = (int)Math.round(Math.cos(Math.PI*facing/2));
+        int facingy = (int)Math.round(Math.sin(Math.PI*facing/2));
+        
+        i += facingx;
+        j += facingy;
+        if(j < 0) j += Ant.NY;
+        if(i < 0) i += Ant.NX;
+        if(j >= Ant.NY) j -= Ant.NY;
+        if(i >= Ant.NX) i -= Ant.NX;
+    }
+
+    void init(SpriteComponent sc,boolean[][] grid) {
+        this.grid = grid;
+        this.sc = sc;
+        sc.addSprite(this);
+    }
+    
+}

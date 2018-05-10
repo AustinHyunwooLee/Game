@@ -1,0 +1,4 @@
+Disallow / or \ in picture or wav file name.
+Sprite collisions should happen only the first time, not repeatedly
+Sprite collisions should indicate which side the collision happened on
+Splash screen support (actually cards)
